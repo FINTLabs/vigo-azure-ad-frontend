@@ -1,5 +1,5 @@
 {
-  "name": "vigo-azure-ad-user-frontend",
+  "name": "vigo-azure-ad-frontend",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
