@@ -6,7 +6,7 @@ const SearchField = (props) => {
     const {searchValue, setSearchValue} = props;
     return (
         <Box display={"flex"} width={300} margin={"auto"} justifyContent={"center"} mt={2} >
-            <TextField id="outlined-basic" label="Navn" variant="outlined" onChange={(setSearchValue)} color={"secondary"}/>
+            <TextField id="outlined-basic" label="Søk på navn" variant="outlined" onChange={(setSearchValue)} color={"secondary"} placeholder={"Fornavn Etternavn"}/>
         </Box>
     );
 };

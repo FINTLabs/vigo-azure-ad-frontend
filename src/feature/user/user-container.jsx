@@ -87,12 +87,7 @@ const UserContainer = () => {
 
     const reInvite = (user => {
         setLoading(true);
-        axios.post('/api/qlik/user/invite/', {
-                countyNumber: user.department,
-                firstName: user.givenName,
-                lastName: user.surname,
-                email: user.mail,
-                mobile: user.mobilePhone,
+        axios.post('/api/qlik/user/invite/'+user.mail, {
             },
         )
             .then(result => {
