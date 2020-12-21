@@ -19,6 +19,8 @@ import AcceptedWaitingIcon from '@material-ui/icons/HourglassEmpty';
 import moment from 'moment';
 import Tooltip from "@material-ui/core/Tooltip";
 import Snackbar from "@material-ui/core/Snackbar";
+import CountySelector from "./county-selector";
+import SearchField from "./search-field";
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,11 +39,20 @@ const useStyles = makeStyles(theme => ({
     countyImage: {
         height: 40,
     },
+    countyImageTop: {
+        height: 40,
+        marginTop: 25,
+        marginLeft: 10,
+    },
     vigoLogo: {
         height: '75px',
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(4),
         padding: theme.spacing(2),
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
     },
 
 }));
@@ -51,6 +62,8 @@ const UserContainer = () => {
     const [loading, setLoading] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
+    const [county, setCounty] = useState(34);
+    const [searchValue, setSearchValue] = useState('');
     const classes = useStyles();
 
     const handleCloseMessage = (event, reason) => {
@@ -74,10 +87,12 @@ const UserContainer = () => {
 
     const reInvite = (user => {
         setLoading(true);
-        axios.post('/api/user/invite/' + user.mail)
+        axios.post('/api/qlik/user/invite/'+user.mail, {
+            },
+        )
             .then(result => {
                 if (result.status === 204) {
-                    setMessage(`${user.displayName} ble inviter på nytt`);
+                    setMessage(`${user.displayName} ble invitert på nytt`);
                     setShowMessage(true);
                 }
             })
@@ -91,6 +106,31 @@ const UserContainer = () => {
     useEffect(() => {
         refreshUsers();
     }, []);
+
+    function handleFilterCountyChange(event) {
+        setCounty(event.target.value);
+    }
+
+    function handleSearchValue(event) {
+        setSearchValue(event.target.value);
+    }
+
+    function matchSearch(user) {
+        let matched = false;
+        let lowerCaseSearchValue = searchValue.toLowerCase();
+        if (searchValue === '') {
+            matched = true;
+        } else if (user.givenName && user.givenName.toLowerCase().includes(lowerCaseSearchValue)) {
+            matched = true;
+        }
+        else if (user.surName && user.surName.toLowerCase().includes(lowerCaseSearchValue)) {
+            matched = true;
+        }
+        else if (user.displayName && user.displayName.toLowerCase().includes(lowerCaseSearchValue)) {
+            matched = true;
+        }
+        return matched;
+    }
 
     return (
         <Box>
@@ -114,6 +154,8 @@ const UserContainer = () => {
                         horizontal: 'center',
                     }}
                 />
+                <CountySelector classes={classes} county={county} handleFilterCountyChange={handleFilterCountyChange}/>
+                <SearchField searchValue={searchValue} setSearchValue={handleSearchValue}/>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -128,62 +170,63 @@ const UserContainer = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.map(user => (
-                            <TableRow key={user.userPrincipalName}>
-                                <TableCell component="th" scope="row">
-                                    {user.displayName}
-                                </TableCell>
-                                <TableCell>
-                                    {user.mail ? user.mail : user.userPrincipalName}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {user.department &&
-                                    <img alt="fylkesvåpen" className={classes.countyImage}
-                                         src={'./assets/' + user.department + '.png'}/>}
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        user.externalUserState === 'PendingAcceptance' ?
-                                            <Tooltip
-                                                title="Venter på at brukeren skal akseptere invitasjonen">
-                                                <AcceptedWaitingIcon/>
-                                            </Tooltip>
-                                            : <AcceptedIcon/>
-                                    }
-                                </TableCell>
-                                <TableCell align="center">
-                                    {user.userType === 'Guest' ?
-                                        <Tooltip title="Gjest"><GuestIcon/></Tooltip> :
-                                        <Tooltip title="Intern"><MemberIcon/></Tooltip>}
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        user.userType === 'Guest' &&
-                                        moment(user.externalUserStateChangeDateTime).format("DD.MM.Y HH:mm:ss")
+                        {users.filter(user => user.department === county.toString() || county === 0)
+                            .filter(user => matchSearch(user))
+                            .map(user => (
+                                <TableRow key={user.userPrincipalName}>
+                                    <TableCell component="th" scope="row">
+                                        {user.displayName}
+                                    </TableCell>
+                                    <TableCell>
+                                        {user.mail ? user.mail : user.userPrincipalName}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {user.department &&
+                                        <img alt="fylkesvåpen" className={classes.countyImage}
+                                             src={'./assets/' + user.department + '.png'}/>}
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            user.externalUserState === 'PendingAcceptance' ?
+                                                <Tooltip
+                                                    title="Venter på at brukeren skal akseptere invitasjonen">
+                                                    <AcceptedWaitingIcon/>
+                                                </Tooltip>
+                                                : <AcceptedIcon/>
+                                        }
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {user.userType === 'Guest' ?
+                                            <Tooltip title="Gjest"><GuestIcon/></Tooltip> :
+                                            <Tooltip title="Intern"><MemberIcon/></Tooltip>}
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            user.userType === 'Guest' &&
+                                            moment(user.externalUserStateChangeDateTime).format("DD.MM.Y HH:mm:ss")
 
-                                    }
-                                </TableCell>
-                                <TableCell>
-                                    {moment(user.createdDateTime).format("DD.MM.Y HH:mm:ss")}
-                                </TableCell>
-                                <TableCell>
-                                    {
-                                        user.userType === 'Guest' &&
-                                        <Button
-                                            size="small"
-                                            variant="outlined"
-                                            color="secondary"
-                                            onClick={() => reInvite(user)}
-                                        >
-                                            Inviter på nytt
-                                        </Button>
-                                    }
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        {moment(user.createdDateTime).format("DD.MM.Y HH:mm:ss")}
+                                    </TableCell>
+                                    <TableCell>
+                                        {
+                                            user.userType === 'Guest' &&
+                                            <Button
+                                                size="small"
+                                                variant="outlined"
+                                                color="secondary"
+                                                onClick={() => reInvite(user)}
+                                            >
+                                                Send invitasjon
+                                            </Button>
+                                        }
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
-
             </Box>
         </Box>
     );
