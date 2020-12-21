@@ -62,7 +62,7 @@ const UserContainer = () => {
     const [loading, setLoading] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
-    const [county, setCounty] = useState(0);
+    const [county, setCounty] = useState(34);
     const [searchValue, setSearchValue] = useState('');
     const classes = useStyles();
 

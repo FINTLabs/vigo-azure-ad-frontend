@@ -18,7 +18,6 @@ const CountySelector = (props) => {
                     value={county}
                     onChange={(event) => handleFilterCountyChange(event)}
                 >
-                    <MenuItem value={0}>Alle</MenuItem>
                     <MenuItem value={3}> <Box ml={1}>Oslo</Box></MenuItem>
                     <MenuItem value={11}><Box ml={1}>Rogaland</Box></MenuItem>
                     <MenuItem value={15}><Box ml={1}>Møre og Romsdal</Box></MenuItem>
