@@ -29,6 +29,7 @@ const CountySelector = (props) => {
                     <MenuItem value={46}><Box ml={1}>Vestland</Box></MenuItem>
                     <MenuItem value={50}><Box ml={1}>Trøndelag</Box></MenuItem>
                     <MenuItem value={54}><Box ml={1}>Troms og Finnmark</Box></MenuItem>
+                    <MenuItem value={98}><Box ml={1}>IST</Box></MenuItem>
                 </Select>
             </FormControl>
             {county !== 0 && <GetCountyPicture number={county} classes={classes}/>}
