@@ -34,5 +34,3 @@ jobs:
           ref: master
           workflow_file_name: deploy.yaml
           github_token: ${{ secrets.GITHUBWORKFLOW_TOKEN_FSJOVATSEN }}
-
-
