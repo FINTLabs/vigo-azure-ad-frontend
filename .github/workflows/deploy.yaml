@@ -26,7 +26,7 @@ jobs:
           docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
           docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
 
-      -name: Trigger backend build
+      - name: Trigger backend build
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: fintlabs
