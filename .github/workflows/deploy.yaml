@@ -5,6 +5,7 @@ on:
       - master
 
 env:
+  REGISTRY_NAME: fintlabsacr
   APP_NAME: vigo-azure-ad-frontend
 
 jobs:
