@@ -32,4 +32,5 @@ jobs:
           owner: fintlabs
           repo: vigo-azure-ad-service
           ref: master
+          workflow_file_name: deploy.yaml
           github_token: ${{ secrets.GITHUBWORKFLOW_TOKEN_FSJOVATSEN }}
