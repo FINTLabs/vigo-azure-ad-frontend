@@ -25,3 +25,11 @@ jobs:
         run: |
           docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
           docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
+
+      -name: Trigger backend build
+        uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: fintlabs
+          repo: vigo-azure-ad-service
+          ref: master
+          github_token: ${{ secrets.GITHUB_PERSONAL_ACCESS_TOKEN }}
