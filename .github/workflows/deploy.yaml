@@ -32,4 +32,4 @@ jobs:
           owner: fintlabs
           repo: vigo-azure-ad-service
           ref: master
-          github_token: ${{ secrets.GITHUB_PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUBWORKFLOW_TOKEN_FSJOVATSEN }}
