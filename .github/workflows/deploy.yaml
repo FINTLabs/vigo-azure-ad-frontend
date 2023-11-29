@@ -33,4 +33,4 @@ jobs:
           repo: vigo-azure-ad-service
           ref: master
           workflow_file_name: deploy.yaml
-          github_token: ${{ secrets.GITHUBWORKFLOW_TOKEN_FSJOVATSEN }}
+          github_token: ${{ secrets.AKS_API_FINT_GITHUB }}
