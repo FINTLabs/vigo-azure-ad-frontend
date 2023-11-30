@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import MemberIcon from '@material-ui/icons/Apartment';
@@ -107,6 +108,27 @@ const UserContainer = () => {
         refreshUsers();
     }, []);
 
+    const [sortBy, setSortBy] = React.useState('');
+    const [sortOrder, setSortOrder] = React.useState('asc');
+
+    const handleSort = (property) => {
+        const isAsc = sortBy === property && sortOrder === 'asc';
+        setSortBy(property);
+        setSortOrder(isAsc ? 'desc' : 'asc');
+
+        // Implement the sorting logic for your array
+        const sorted = [...users].sort((a, b) => {
+            if (isAsc) {
+                return a[property].localeCompare(b[property]);
+            } else {
+                return b[property].localeCompare(a[property]);
+            }
+        });
+
+        // Update the users array with the sorted data
+        setUsers(sorted);
+    };
+
     function handleFilterCountyChange(event) {
         setCounty(event.target.value);
     }
@@ -159,13 +181,37 @@ const UserContainer = () => {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Navn</TableCell>
-                            <TableCell>Epost</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortBy === 'displayName'}
+                                    direction={sortBy === 'displayName' ? sortOrder : 'asc'}
+                                    onClick={() => handleSort('displayName')}
+                                >
+                                    Navn
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortBy === 'mail'}
+                                    direction={sortBy === 'mail' ? sortOrder : 'asc'}
+                                    onClick={() => handleSort('mail')}
+                                >
+                                    Epost
+                                </TableSortLabel>
+                            </TableCell>
                             <TableCell align="center">Fylke</TableCell>
                             <TableCell align="center">Status</TableCell>
                             <TableCell align="center">Type</TableCell>
                             <TableCell>Invitasjon sist oppdatert</TableCell>
-                            <TableCell>Opprettet</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortBy === 'createdDateTime'}
+                                    direction={sortBy === 'createdDateTime' ? sortOrder : 'asc'}
+                                    onClick={() => handleSort('createdDateTime')}
+                                >
+                                    Opprettet
+                                </TableSortLabel>
+                            </TableCell>
                             <TableCell>Handling</TableCell>
                         </TableRow>
                     </TableHead>
