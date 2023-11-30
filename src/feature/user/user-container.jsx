@@ -160,7 +160,7 @@ const UserContainer = () => {
                 <Toolbar>
                     <img src='./assets/vigo.svg' alt="Vigo logo" className={classes.vigoLogo}/>
                     <Typography variant="h4" className={classes.title}>
-                        QLIK BRUKER ADMIN
+                        Qlik Sense brukere av lokale apper
                     </Typography>
                 </Toolbar>
             </AppBar>
